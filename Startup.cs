@@ -23,23 +23,16 @@ namespace bleissem.com
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+            HostingEnvironment = env;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfigurationRoot Configuration { get; private set; }
+        public IHostingEnvironment HostingEnvironment { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IApplicationBuilder app, IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            app.UseStaticFiles();
-            app.UseStaticFiles(new StaticFileOptions
-            {
-                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @".well-known")),
-                RequestPath = new PathString("/.well-known"),
-                ServeUnknownFileTypes = true // serve extensionless file
-            });
-
-            app.UseMvc();
             services.AddMvc();
         }
 
@@ -60,7 +53,13 @@ namespace bleissem.com
             }
 
             app.UseStaticFiles();
-
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @".well-known")),
+                RequestPath = new PathString("/.well-known"),
+                ServeUnknownFileTypes = true // serve extensionless file                
+            });
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
