@@ -3,6 +3,12 @@
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.vs/*
+!.vs/settings.json
+!.vs/tasks.json
+!.vs/launch.json
+!.vs/extensions.json
 [Oo]bj/*
 [Bb]in/*
 wwwroot/lib/*
+.suo
